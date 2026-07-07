@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -110,8 +111,31 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    let mounted = true;
+    // Register listener synchronously to avoid missing early auth events.
+    import("@/integrations/supabase/client").then(({ supabase }) => {
+      if (!mounted) return;
+      const { data } = supabase.auth.onAuthStateChange((event) => {
+        if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+        router.invalidate();
+        if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+      });
+      // Store on window for cleanup
+      (window as unknown as { __preprAuthSub?: { unsubscribe: () => void } }).__preprAuthSub = data.subscription;
+    });
+    return () => {
+      mounted = false;
+      const sub = (window as unknown as { __preprAuthSub?: { unsubscribe: () => void } }).__preprAuthSub;
+      sub?.unsubscribe();
+    };
+  }, [queryClient, router]);
+
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster richColors theme="dark" position="top-right" />
       <Outlet />
     </QueryClientProvider>
   );

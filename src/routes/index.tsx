@@ -55,7 +55,7 @@ function Landing() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/"
+                to="/auth"
                 className="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 glow-ring"
               >
                 Start free interview
@@ -163,7 +163,7 @@ function Landing() {
             Start a session in under a minute. No credit card. Free tier included.
           </p>
           <Link
-            to="/"
+            to="/auth"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 glow-ring"
           >
             Start free interview

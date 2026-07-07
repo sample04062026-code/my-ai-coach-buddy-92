@@ -39,10 +39,10 @@ function Dashboard() {
     "there";
 
   const quickActions = [
-    { icon: FileText, title: "Upload resume", desc: "Extract skills and projects.", to: "/dashboard" },
-    { icon: Target, title: "Match a JD", desc: "See your fit and gaps.", to: "/dashboard" },
-    { icon: Sparkles, title: "Start interview", desc: "Behavioral, technical, or coding.", to: "/dashboard" },
-    { icon: LineChart, title: "View progress", desc: "Scores and trends over time.", to: "/dashboard" },
+    { icon: FileText, title: "Upload resume", desc: "Extract skills and projects.", to: "/resume" as const },
+    { icon: Target, title: "Match a JD", desc: "See your fit and gaps.", to: "/dashboard" as const },
+    { icon: Sparkles, title: "Start interview", desc: "Behavioral, technical, or coding.", to: "/dashboard" as const },
+    { icon: LineChart, title: "View progress", desc: "Scores and trends over time.", to: "/dashboard" as const },
   ];
 
   return (

@@ -44,6 +44,48 @@ export type Database = {
         }
         Relationships: []
       }
+      resumes: {
+        Row: {
+          created_at: string
+          error: string | null
+          file_path: string
+          filename: string
+          id: string
+          mime_type: string | null
+          parsed: Json | null
+          raw_text: string | null
+          status: Database["public"]["Enums"]["resume_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          file_path: string
+          filename: string
+          id?: string
+          mime_type?: string | null
+          parsed?: Json | null
+          raw_text?: string | null
+          status?: Database["public"]["Enums"]["resume_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          file_path?: string
+          filename?: string
+          id?: string
+          mime_type?: string | null
+          parsed?: Json | null
+          raw_text?: string | null
+          status?: Database["public"]["Enums"]["resume_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -80,6 +122,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      resume_status: "uploaded" | "parsing" | "ready" | "failed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -208,6 +251,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      resume_status: ["uploaded", "parsing", "ready", "failed"],
     },
   },
 } as const

@@ -12,9 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedResumeRouteImport } from './routes/_authenticated/resume'
 import { Route as AuthenticatedJdMatchRouteImport } from './routes/_authenticated/jd-match'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedInterviewIndexRouteImport } from './routes/_authenticated/interview/index'
+import { Route as AuthenticatedInterviewSessionIdRouteImport } from './routes/_authenticated/interview/$sessionId'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -28,6 +31,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedResumeRoute = AuthenticatedResumeRouteImport.update({
@@ -45,6 +53,18 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedInterviewIndexRoute =
+  AuthenticatedInterviewIndexRouteImport.update({
+    id: '/interview/',
+    path: '/interview/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedInterviewSessionIdRoute =
+  AuthenticatedInterviewSessionIdRouteImport.update({
+    id: '/interview/$sessionId',
+    path: '/interview/$sessionId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -52,6 +72,9 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/jd-match': typeof AuthenticatedJdMatchRoute
   '/resume': typeof AuthenticatedResumeRoute
+  '/api/chat': typeof ApiChatRoute
+  '/interview/$sessionId': typeof AuthenticatedInterviewSessionIdRoute
+  '/interview/': typeof AuthenticatedInterviewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -59,6 +82,9 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/jd-match': typeof AuthenticatedJdMatchRoute
   '/resume': typeof AuthenticatedResumeRoute
+  '/api/chat': typeof ApiChatRoute
+  '/interview/$sessionId': typeof AuthenticatedInterviewSessionIdRoute
+  '/interview': typeof AuthenticatedInterviewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -68,12 +94,31 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/jd-match': typeof AuthenticatedJdMatchRoute
   '/_authenticated/resume': typeof AuthenticatedResumeRoute
+  '/api/chat': typeof ApiChatRoute
+  '/_authenticated/interview/$sessionId': typeof AuthenticatedInterviewSessionIdRoute
+  '/_authenticated/interview/': typeof AuthenticatedInterviewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/jd-match' | '/resume'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/jd-match'
+    | '/resume'
+    | '/api/chat'
+    | '/interview/$sessionId'
+    | '/interview/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/jd-match' | '/resume'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/jd-match'
+    | '/resume'
+    | '/api/chat'
+    | '/interview/$sessionId'
+    | '/interview'
   id:
     | '__root__'
     | '/'
@@ -82,12 +127,16 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/jd-match'
     | '/_authenticated/resume'
+    | '/api/chat'
+    | '/_authenticated/interview/$sessionId'
+    | '/_authenticated/interview/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiChatRoute: typeof ApiChatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -113,6 +162,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/resume': {
       id: '/_authenticated/resume'
       path: '/resume'
@@ -134,6 +190,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/interview/': {
+      id: '/_authenticated/interview/'
+      path: '/interview'
+      fullPath: '/interview/'
+      preLoaderRoute: typeof AuthenticatedInterviewIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/interview/$sessionId': {
+      id: '/_authenticated/interview/$sessionId'
+      path: '/interview/$sessionId'
+      fullPath: '/interview/$sessionId'
+      preLoaderRoute: typeof AuthenticatedInterviewSessionIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -141,12 +211,16 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedJdMatchRoute: typeof AuthenticatedJdMatchRoute
   AuthenticatedResumeRoute: typeof AuthenticatedResumeRoute
+  AuthenticatedInterviewSessionIdRoute: typeof AuthenticatedInterviewSessionIdRoute
+  AuthenticatedInterviewIndexRoute: typeof AuthenticatedInterviewIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedJdMatchRoute: AuthenticatedJdMatchRoute,
   AuthenticatedResumeRoute: AuthenticatedResumeRoute,
+  AuthenticatedInterviewSessionIdRoute: AuthenticatedInterviewSessionIdRoute,
+  AuthenticatedInterviewIndexRoute: AuthenticatedInterviewIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -156,6 +230,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

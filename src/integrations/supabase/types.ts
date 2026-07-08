@@ -14,6 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
+      interview_messages: {
+        Row: {
+          created_at: string
+          id: string
+          parts: Json
+          role: Database["public"]["Enums"]["message_role"]
+          session_id: string
+          token_usage: Json | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          parts: Json
+          role: Database["public"]["Enums"]["message_role"]
+          session_id: string
+          token_usage?: Json | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          parts?: Json
+          role?: Database["public"]["Enums"]["message_role"]
+          session_id?: string
+          token_usage?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interview_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "interview_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interview_sessions: {
+        Row: {
+          config: Json
+          created_at: string
+          ended_at: string | null
+          feedback: Json | null
+          id: string
+          job_match_id: string | null
+          resume_id: string | null
+          score: Json | null
+          status: Database["public"]["Enums"]["interview_status"]
+          title: string
+          type: Database["public"]["Enums"]["interview_type"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          ended_at?: string | null
+          feedback?: Json | null
+          id?: string
+          job_match_id?: string | null
+          resume_id?: string | null
+          score?: Json | null
+          status?: Database["public"]["Enums"]["interview_status"]
+          title: string
+          type: Database["public"]["Enums"]["interview_type"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          ended_at?: string | null
+          feedback?: Json | null
+          id?: string
+          job_match_id?: string | null
+          resume_id?: string | null
+          score?: Json | null
+          status?: Database["public"]["Enums"]["interview_status"]
+          title?: string
+          type?: Database["public"]["Enums"]["interview_type"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interview_sessions_job_match_id_fkey"
+            columns: ["job_match_id"]
+            isOneToOne: false
+            referencedRelation: "job_matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "interview_sessions_resume_id_fkey"
+            columns: ["resume_id"]
+            isOneToOne: false
+            referencedRelation: "resumes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_matches: {
         Row: {
           company: string | null
@@ -190,6 +291,15 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      interview_status: "active" | "ended" | "abandoned"
+      interview_type:
+        | "behavioral"
+        | "technical"
+        | "coding"
+        | "system_design"
+        | "hr"
+        | "ai_engineer"
+      message_role: "system" | "user" | "assistant"
       resume_status: "uploaded" | "parsing" | "ready" | "failed"
     }
     CompositeTypes: {
@@ -319,6 +429,16 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      interview_status: ["active", "ended", "abandoned"],
+      interview_type: [
+        "behavioral",
+        "technical",
+        "coding",
+        "system_design",
+        "hr",
+        "ai_engineer",
+      ],
+      message_role: ["system", "user", "assistant"],
       resume_status: ["uploaded", "parsing", "ready", "failed"],
     },
   },

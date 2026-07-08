@@ -14,6 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
+      job_matches: {
+        Row: {
+          company: string | null
+          created_at: string
+          id: string
+          jd_text: string
+          job_title: string | null
+          keyword_gaps: Json
+          matched_skills: Json
+          missing_skills: Json
+          practice_plan: Json
+          resume_id: string | null
+          risks: Json
+          score: number
+          strengths: Json
+          summary: string
+          updated_at: string
+          user_id: string
+          verdict: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          id?: string
+          jd_text: string
+          job_title?: string | null
+          keyword_gaps?: Json
+          matched_skills?: Json
+          missing_skills?: Json
+          practice_plan?: Json
+          resume_id?: string | null
+          risks?: Json
+          score: number
+          strengths?: Json
+          summary: string
+          updated_at?: string
+          user_id: string
+          verdict: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          id?: string
+          jd_text?: string
+          job_title?: string | null
+          keyword_gaps?: Json
+          matched_skills?: Json
+          missing_skills?: Json
+          practice_plan?: Json
+          resume_id?: string | null
+          risks?: Json
+          score?: number
+          strengths?: Json
+          summary?: string
+          updated_at?: string
+          user_id?: string
+          verdict?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_matches_resume_id_fkey"
+            columns: ["resume_id"]
+            isOneToOne: false
+            referencedRelation: "resumes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

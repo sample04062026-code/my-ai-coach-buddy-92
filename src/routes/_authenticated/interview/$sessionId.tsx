@@ -116,12 +116,14 @@ function ChatSurface({
     () =>
       new DefaultChatTransport({
         api: "/api/chat",
-        body: () => ({ sessionId }),
-        headers: async () => {
+        body: { sessionId },
+        fetch: (async (input, init) => {
           const { data } = await supabase.auth.getSession();
           const token = data.session?.access_token;
-          return token ? { Authorization: `Bearer ${token}` } : {};
-        },
+          const headers = new Headers(init?.headers);
+          if (token) headers.set("Authorization", `Bearer ${token}`);
+          return fetch(input, { ...init, headers });
+        }) as typeof fetch,
       }),
     [sessionId],
   );

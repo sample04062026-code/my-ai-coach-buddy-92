@@ -120,7 +120,7 @@ export const Route = createFileRoute("/api/chat")({
             session_id: sessionId,
             user_id: userId,
             role: "user",
-            parts: latestUser.parts as unknown as object,
+            parts: JSON.parse(JSON.stringify(latestUser.parts)),
           });
         }
 
@@ -131,7 +131,7 @@ export const Route = createFileRoute("/api/chat")({
           const result = streamText({
             model,
             system: systemPrompt,
-            messages: convertToModelMessages(messages),
+            messages: await convertToModelMessages(messages),
           });
 
           return result.toUIMessageStreamResponse({
@@ -141,7 +141,7 @@ export const Route = createFileRoute("/api/chat")({
                 session_id: sessionId,
                 user_id: userId,
                 role: "assistant",
-                parts: responseMessage.parts as unknown as object,
+                parts: JSON.parse(JSON.stringify(responseMessage.parts)),
               });
               await supabase
                 .from("interview_sessions")

@@ -182,10 +182,15 @@ function InterviewIndex() {
                       params={{ sessionId: s.id }}
                       className="min-w-0 flex-1"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="truncate font-medium">{s.title}</span>
                         <Badge variant="secondary" className="capitalize">{typeLabel}</Badge>
                         {s.status === "ended" && <Badge variant="outline">Ended</Badge>}
+                        {typeof (s.score as { overall?: number } | null)?.overall === "number" && (
+                          <Badge className="bg-primary/15 text-primary border-primary/30" variant="outline">
+                            Score {(s.score as { overall: number }).overall}
+                          </Badge>
+                        )}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {new Date(s.created_at).toLocaleString()}

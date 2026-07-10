@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import ReactMarkdown from "react-markdown";
-import { ArrowLeft, Loader2, Send, StopCircle, Square } from "lucide-react";
+import { ArrowLeft, Loader2, Send, Sparkles, StopCircle, Square } from "lucide-react";
 import { toast } from "sonner";
 
 import agentAvatar from "@/assets/agent-avatar.png";
 import { supabase } from "@/integrations/supabase/client";
 import { getInterviewSession, endInterviewSession, INTERVIEW_TYPES } from "@/lib/interview.functions";
+import { scoreInterviewSession, type InterviewScoreResult } from "@/lib/interview-score.functions";
+import { InterviewFeedback } from "@/components/interview-feedback";
 import { SiteNav } from "@/components/site-nav";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -84,6 +86,7 @@ function InterviewSessionPage() {
       type={data.session.type as string}
       status={data.session.status as string}
       initialMessages={initialMessages}
+      initialFeedback={(data.session.feedback as unknown as InterviewScoreResult | null) ?? null}
       onEnd={async () => {
         await endFn({ data: { id: sessionId } });
         toast.success("Session ended");
@@ -99,6 +102,7 @@ function ChatSurface({
   type,
   status: sessionStatus,
   initialMessages,
+  initialFeedback,
   onEnd,
 }: {
   sessionId: string;
@@ -106,11 +110,29 @@ function ChatSurface({
   type: string;
   status: string;
   initialMessages: UIMessage[];
+  initialFeedback: InterviewScoreResult | null;
   onEnd: () => Promise<void>;
 }) {
   const [input, setInput] = useState("");
+  const [feedback, setFeedback] = useState<InterviewScoreResult | null>(initialFeedback);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const qc = useQueryClient();
+  const scoreFn = useServerFn(scoreInterviewSession);
+
+  const scoreMutation = useMutation({
+    mutationFn: () => scoreFn({ data: { id: sessionId } }),
+    onSuccess: (r) => {
+      setFeedback(r);
+      qc.invalidateQueries({ queryKey: ["interview_session", sessionId] });
+      qc.invalidateQueries({ queryKey: ["interview_sessions"] });
+      toast.success("Feedback ready");
+    },
+    onError: (e) =>
+      toast.error("Could not score session", {
+        description: e instanceof Error ? e.message : "Try again.",
+      }),
+  });
 
   const transport = useMemo(
     () =>
@@ -183,11 +205,24 @@ function ChatSurface({
               </div>
             </div>
           </div>
-          {sessionStatus !== "ended" && (
-            <Button variant="outline" size="sm" onClick={onEnd}>
-              <StopCircle className="mr-2 h-4 w-4" /> End session
+          <div className="flex items-center gap-2">
+            {sessionStatus !== "ended" && (
+              <Button variant="outline" size="sm" onClick={onEnd}>
+                <StopCircle className="mr-2 h-4 w-4" /> End
+              </Button>
+            )}
+            <Button
+              size="sm"
+              onClick={() => scoreMutation.mutate()}
+              disabled={scoreMutation.isPending || messages.length < 2}
+            >
+              {scoreMutation.isPending ? (
+                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Scoring…</>
+              ) : (
+                <><Sparkles className="mr-2 h-4 w-4" /> {feedback ? "Re-score" : "Score & feedback"}</>
+              )}
             </Button>
-          )}
+          </div>
         </div>
       </header>
 
@@ -199,6 +234,11 @@ function ChatSurface({
           {status === "submitted" && <TypingIndicator />}
           {error && (
             <p className="text-sm text-destructive">{error.message}</p>
+          )}
+          {feedback && (
+            <div className="pt-4">
+              <InterviewFeedback result={feedback} />
+            </div>
           )}
         </div>
       </div>

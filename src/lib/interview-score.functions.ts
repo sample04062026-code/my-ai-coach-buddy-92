@@ -161,8 +161,8 @@ export const scoreInterviewSession = createServerFn({ method: "POST" })
     const { error: uErr } = await supabase
       .from("interview_sessions")
       .update({
-        score: { overall: result.overall, rubric: result.rubric, verdict: result.verdict },
-        feedback: result as unknown as Record<string, unknown>,
+        score: JSON.parse(JSON.stringify({ overall: result.overall, rubric: result.rubric, verdict: result.verdict })),
+        feedback: JSON.parse(JSON.stringify(result)),
         status: "ended",
         ended_at: new Date().toISOString(),
       })

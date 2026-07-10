@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import ReactMarkdown from "react-markdown";
-import { ArrowLeft, Loader2, Send, StopCircle, Square } from "lucide-react";
+import { ArrowLeft, Loader2, Send, Sparkles, StopCircle, Square } from "lucide-react";
 import { toast } from "sonner";
 
 import agentAvatar from "@/assets/agent-avatar.png";
 import { supabase } from "@/integrations/supabase/client";
 import { getInterviewSession, endInterviewSession, INTERVIEW_TYPES } from "@/lib/interview.functions";
+import { scoreInterviewSession, type InterviewScoreResult } from "@/lib/interview-score.functions";
+import { InterviewFeedback } from "@/components/interview-feedback";
 import { SiteNav } from "@/components/site-nav";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";

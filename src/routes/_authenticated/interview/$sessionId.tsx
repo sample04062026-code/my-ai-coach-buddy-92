@@ -205,11 +205,24 @@ function ChatSurface({
               </div>
             </div>
           </div>
-          {sessionStatus !== "ended" && (
-            <Button variant="outline" size="sm" onClick={onEnd}>
-              <StopCircle className="mr-2 h-4 w-4" /> End session
+          <div className="flex items-center gap-2">
+            {sessionStatus !== "ended" && (
+              <Button variant="outline" size="sm" onClick={onEnd}>
+                <StopCircle className="mr-2 h-4 w-4" /> End
+              </Button>
+            )}
+            <Button
+              size="sm"
+              onClick={() => scoreMutation.mutate()}
+              disabled={scoreMutation.isPending || messages.length < 2}
+            >
+              {scoreMutation.isPending ? (
+                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Scoring…</>
+              ) : (
+                <><Sparkles className="mr-2 h-4 w-4" /> {feedback ? "Re-score" : "Score & feedback"}</>
+              )}
             </Button>
-          )}
+          </div>
         </div>
       </header>
 
@@ -221,6 +234,11 @@ function ChatSurface({
           {status === "submitted" && <TypingIndicator />}
           {error && (
             <p className="text-sm text-destructive">{error.message}</p>
+          )}
+          {feedback && (
+            <div className="pt-4">
+              <InterviewFeedback result={feedback} />
+            </div>
           )}
         </div>
       </div>

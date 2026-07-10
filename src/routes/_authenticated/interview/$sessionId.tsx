@@ -86,6 +86,7 @@ function InterviewSessionPage() {
       type={data.session.type as string}
       status={data.session.status as string}
       initialMessages={initialMessages}
+      initialFeedback={(data.session.feedback as unknown as InterviewScoreResult | null) ?? null}
       onEnd={async () => {
         await endFn({ data: { id: sessionId } });
         toast.success("Session ended");
@@ -101,6 +102,7 @@ function ChatSurface({
   type,
   status: sessionStatus,
   initialMessages,
+  initialFeedback,
   onEnd,
 }: {
   sessionId: string;
@@ -108,11 +110,29 @@ function ChatSurface({
   type: string;
   status: string;
   initialMessages: UIMessage[];
+  initialFeedback: InterviewScoreResult | null;
   onEnd: () => Promise<void>;
 }) {
   const [input, setInput] = useState("");
+  const [feedback, setFeedback] = useState<InterviewScoreResult | null>(initialFeedback);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const qc = useQueryClient();
+  const scoreFn = useServerFn(scoreInterviewSession);
+
+  const scoreMutation = useMutation({
+    mutationFn: () => scoreFn({ data: { id: sessionId } }),
+    onSuccess: (r) => {
+      setFeedback(r);
+      qc.invalidateQueries({ queryKey: ["interview_session", sessionId] });
+      qc.invalidateQueries({ queryKey: ["interview_sessions"] });
+      toast.success("Feedback ready");
+    },
+    onError: (e) =>
+      toast.error("Could not score session", {
+        description: e instanceof Error ? e.message : "Try again.",
+      }),
+  });
 
   const transport = useMemo(
     () =>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Sparkles, LogOut, LayoutDashboard } from "lucide-react";
+import { Sparkles, LogOut, LayoutDashboard, Settings } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -67,6 +67,9 @@ export function SiteNav() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={() => navigate({ to: "/dashboard" })}>
                   <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/settings" })}>
+                  <Settings className="mr-2 h-4 w-4" /> Settings
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={handleSignOut}>
                   <LogOut className="mr-2 h-4 w-4" /> Sign out

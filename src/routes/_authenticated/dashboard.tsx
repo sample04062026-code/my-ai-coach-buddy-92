@@ -1,9 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, FileText, LineChart, Target, Sparkles } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { ArrowRight, FileText, LineChart, MessageCircle, Sparkles, Target } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site-nav";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { INTERVIEW_TYPES, listInterviewSessions } from "@/lib/interview.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
@@ -17,6 +21,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function Dashboard() {
   const { user } = Route.useRouteContext();
+  const listFn = useServerFn(listInterviewSessions);
 
   const { data: profile } = useQuery({
     queryKey: ["profile", user.id],
@@ -30,6 +35,13 @@ function Dashboard() {
       return data;
     },
   });
+
+  const { data: sessions } = useQuery({
+    queryKey: ["interview_sessions", user.id],
+    queryFn: () => listFn(),
+  });
+
+  const recentSessions = sessions?.slice(0, 5) ?? [];
 
   const displayName =
     profile?.full_name ??

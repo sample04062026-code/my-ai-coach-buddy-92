@@ -150,8 +150,8 @@ export const Route = createFileRoute("/api/chat")({
             },
           });
         } catch (err) {
-          const message = err instanceof Error ? err.message : "AI error";
-          return new Response(message, { status: 500 });
+          console.error("[api/chat] streamText failed:", err);
+          return new Response("An error occurred. Please try again.", { status: 500 });
         }
       },
     },

@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedResumeRouteImport } from './routes/_authenticated/resume'
+import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
 import { Route as AuthenticatedJdMatchRouteImport } from './routes/_authenticated/jd-match'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedInterviewIndexRouteImport } from './routes/_authenticated/interview/index'
@@ -41,6 +42,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
 const AuthenticatedResumeRoute = AuthenticatedResumeRouteImport.update({
   id: '/resume',
   path: '/resume',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProgressRoute = AuthenticatedProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedJdMatchRoute = AuthenticatedJdMatchRouteImport.update({
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/jd-match': typeof AuthenticatedJdMatchRoute
+  '/progress': typeof AuthenticatedProgressRoute
   '/resume': typeof AuthenticatedResumeRoute
   '/api/chat': typeof ApiChatRoute
   '/interview/$sessionId': typeof AuthenticatedInterviewSessionIdRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/jd-match': typeof AuthenticatedJdMatchRoute
+  '/progress': typeof AuthenticatedProgressRoute
   '/resume': typeof AuthenticatedResumeRoute
   '/api/chat': typeof ApiChatRoute
   '/interview/$sessionId': typeof AuthenticatedInterviewSessionIdRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/jd-match': typeof AuthenticatedJdMatchRoute
+  '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/_authenticated/resume': typeof AuthenticatedResumeRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/interview/$sessionId': typeof AuthenticatedInterviewSessionIdRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/jd-match'
+    | '/progress'
     | '/resume'
     | '/api/chat'
     | '/interview/$sessionId'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/jd-match'
+    | '/progress'
     | '/resume'
     | '/api/chat'
     | '/interview/$sessionId'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/dashboard'
     | '/_authenticated/jd-match'
+    | '/_authenticated/progress'
     | '/_authenticated/resume'
     | '/api/chat'
     | '/_authenticated/interview/$sessionId'
@@ -176,6 +188,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedResumeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/progress': {
+      id: '/_authenticated/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof AuthenticatedProgressRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/jd-match': {
       id: '/_authenticated/jd-match'
       path: '/jd-match'
@@ -210,6 +229,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedJdMatchRoute: typeof AuthenticatedJdMatchRoute
+  AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
   AuthenticatedResumeRoute: typeof AuthenticatedResumeRoute
   AuthenticatedInterviewSessionIdRoute: typeof AuthenticatedInterviewSessionIdRoute
   AuthenticatedInterviewIndexRoute: typeof AuthenticatedInterviewIndexRoute
@@ -218,6 +238,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedJdMatchRoute: AuthenticatedJdMatchRoute,
+  AuthenticatedProgressRoute: AuthenticatedProgressRoute,
   AuthenticatedResumeRoute: AuthenticatedResumeRoute,
   AuthenticatedInterviewSessionIdRoute: AuthenticatedInterviewSessionIdRoute,
   AuthenticatedInterviewIndexRoute: AuthenticatedInterviewIndexRoute,

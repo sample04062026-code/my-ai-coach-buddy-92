@@ -98,7 +98,7 @@ function ProgressPage() {
           <div className="surface-card p-6">
             <p className="text-sm text-muted-foreground">Latest score</p>
             <p className="mt-2 font-display text-3xl font-semibold">
-              {scoredAsc.length > 0 ? scoredAsc[scoredAsc.length - 1].score ?? overall(scoredAsc[scoredAsc.length - 1]) : "—"}
+              {scoredAsc.length > 0 ? overall(scoredAsc[scoredAsc.length - 1]) : "—"}
             </p>
           </div>
         </div>

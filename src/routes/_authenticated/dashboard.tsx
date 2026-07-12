@@ -1,9 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, FileText, LineChart, Target, Sparkles } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { ArrowRight, FileText, LineChart, MessageCircle, Sparkles, Target } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site-nav";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { INTERVIEW_TYPES, listInterviewSessions } from "@/lib/interview.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
@@ -17,6 +21,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function Dashboard() {
   const { user } = Route.useRouteContext();
+  const listFn = useServerFn(listInterviewSessions);
 
   const { data: profile } = useQuery({
     queryKey: ["profile", user.id],
@@ -30,6 +35,13 @@ function Dashboard() {
       return data;
     },
   });
+
+  const { data: sessions } = useQuery({
+    queryKey: ["interview_sessions", user.id],
+    queryFn: () => listFn(),
+  });
+
+  const recentSessions = sessions?.slice(0, 5) ?? [];
 
   const displayName =
     profile?.full_name ??
@@ -80,9 +92,47 @@ function Dashboard() {
 
         <section className="mt-14 surface-card p-8">
           <h2 className="font-display text-xl font-semibold">Recent sessions</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            You haven't run any interviews yet. Start your first session to see scores, transcripts, and feedback here.
-          </p>
+          <ul className="mt-4 divide-y divide-border/60">
+            {recentSessions.length === 0 && (
+              <li className="py-6 text-sm text-muted-foreground">
+                You haven't run any interviews yet. Start your first session to see scores, transcripts, and feedback here.
+              </li>
+            )}
+            {recentSessions.map((s) => {
+              const typeLabel = INTERVIEW_TYPES.find((t) => t.id === s.type)?.label ?? s.type;
+              return (
+                <li key={s.id} className="flex items-center gap-3 py-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <MessageCircle className="h-4 w-4" />
+                  </div>
+                  <Link
+                    to="/interview/$sessionId"
+                    params={{ sessionId: s.id }}
+                    className="min-w-0 flex-1"
+                  >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="truncate font-medium">{s.title}</span>
+                      <Badge variant="secondary" className="capitalize">
+                        {typeLabel}
+                      </Badge>
+                      {s.status === "ended" && <Badge variant="outline">Ended</Badge>}
+                      {typeof (s.score as { overall?: number } | null)?.overall === "number" && (
+                        <Badge className="bg-primary/15 text-primary border-primary/30" variant="outline">
+                          Score {(s.score as { overall: number }).overall}
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="text-xs text-muted-foreground">{new Date(s.created_at).toLocaleString()}</div>
+                  </Link>
+                  <Link to="/interview/$sessionId" params={{ sessionId: s.id }}>
+                    <Button variant="ghost" size="icon" aria-label="Open">
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </section>
       </main>
     </div>

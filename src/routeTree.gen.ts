@@ -13,6 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedResumeRouteImport } from './routes/_authenticated/resume'
 import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
 import { Route as AuthenticatedJdMatchRouteImport } from './routes/_authenticated/jd-match'
@@ -38,6 +39,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedResumeRoute = AuthenticatedResumeRouteImport.update({
   id: '/resume',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/jd-match': typeof AuthenticatedJdMatchRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/resume': typeof AuthenticatedResumeRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/api/chat': typeof ApiChatRoute
   '/interview/$sessionId': typeof AuthenticatedInterviewSessionIdRoute
   '/interview/': typeof AuthenticatedInterviewIndexRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/jd-match': typeof AuthenticatedJdMatchRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/resume': typeof AuthenticatedResumeRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/api/chat': typeof ApiChatRoute
   '/interview/$sessionId': typeof AuthenticatedInterviewSessionIdRoute
   '/interview': typeof AuthenticatedInterviewIndexRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/_authenticated/jd-match': typeof AuthenticatedJdMatchRoute
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/_authenticated/resume': typeof AuthenticatedResumeRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/interview/$sessionId': typeof AuthenticatedInterviewSessionIdRoute
   '/_authenticated/interview/': typeof AuthenticatedInterviewIndexRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/jd-match'
     | '/progress'
     | '/resume'
+    | '/settings'
     | '/api/chat'
     | '/interview/$sessionId'
     | '/interview/'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/jd-match'
     | '/progress'
     | '/resume'
+    | '/settings'
     | '/api/chat'
     | '/interview/$sessionId'
     | '/interview'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/_authenticated/jd-match'
     | '/_authenticated/progress'
     | '/_authenticated/resume'
+    | '/_authenticated/settings'
     | '/api/chat'
     | '/_authenticated/interview/$sessionId'
     | '/_authenticated/interview/'
@@ -180,6 +192,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/chat'
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/resume': {
       id: '/_authenticated/resume'
@@ -231,6 +250,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedJdMatchRoute: typeof AuthenticatedJdMatchRoute
   AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
   AuthenticatedResumeRoute: typeof AuthenticatedResumeRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedInterviewSessionIdRoute: typeof AuthenticatedInterviewSessionIdRoute
   AuthenticatedInterviewIndexRoute: typeof AuthenticatedInterviewIndexRoute
 }
@@ -240,6 +260,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedJdMatchRoute: AuthenticatedJdMatchRoute,
   AuthenticatedProgressRoute: AuthenticatedProgressRoute,
   AuthenticatedResumeRoute: AuthenticatedResumeRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedInterviewSessionIdRoute: AuthenticatedInterviewSessionIdRoute,
   AuthenticatedInterviewIndexRoute: AuthenticatedInterviewIndexRoute,
 }

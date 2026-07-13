@@ -81,7 +81,7 @@ function Dashboard() {
               <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary transition group-hover:bg-primary/20">
                 <a.icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-5 font-display text-lg font-semibold">{a.title}</h3>
+              <h2 className="mt-5 font-display text-lg font-semibold">{a.title}</h2>
               <p className="mt-2 text-sm text-muted-foreground">{a.desc}</p>
               <div className="mt-4 inline-flex items-center gap-1 text-sm text-primary">
                 Start <ArrowRight className="h-3.5 w-3.5" />

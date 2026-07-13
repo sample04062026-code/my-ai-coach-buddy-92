@@ -63,8 +63,10 @@ function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <SiteNav />
+      <main>
 
       {/* Hero */}
+
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-8 lg:py-32">
           <div className="flex flex-col justify-center">
@@ -198,7 +200,10 @@ function Landing() {
         </div>
       </section>
 
+      </main>
+
       <footer className="border-t border-border/40">
+
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-primary" />

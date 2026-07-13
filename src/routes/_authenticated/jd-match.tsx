@@ -163,7 +163,7 @@ function JdMatchPage() {
             {/* History */}
             {history && history.length > 0 && (
               <div className="surface-card p-6">
-                <h3 className="font-display text-lg font-semibold">Recent matches</h3>
+                <h2 className="font-display text-lg font-semibold">Recent matches</h2>
                 <ul className="mt-3 divide-y divide-border/60">
                   {history.map((h) => (
                     <li key={h.id} className="flex items-center justify-between gap-3 py-3">

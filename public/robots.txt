@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /interview
+Disallow: /jd-match
+Disallow: /resume
+Disallow: /progress
+Disallow: /settings
+Disallow: /api/
+
+Sitemap: https://my-ai-coach-buddy-92.lovable.app/sitemap.xml

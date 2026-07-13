@@ -78,14 +78,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Prepr — AI Interview Coach that adapts to you" },
       { name: "description", content: "Practice technical, behavioral, coding, and system design interviews with an AI coach that tailors questions to your resume and target role." },
       { name: "author", content: "Prepr" },
-      { property: "og:title", content: "Prepr — AI Interview Coach that adapts to you" },
-      { property: "og:description", content: "Practice technical, behavioral, coding, and system design interviews with an AI coach that tailors questions to your resume and target role." },
+      { property: "og:site_name", content: "Prepr" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Prepr — AI Interview Coach that adapts to you" },
-      { name: "twitter:description", content: "Practice technical, behavioral, coding, and system design interviews with an AI coach that tailors questions to your resume and target role." },
-      { property: "og:image", content: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200" },
-      { name: "twitter:image", content: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -94,12 +89,36 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://my-ai-coach-buddy-92.lovable.app/#org",
+              name: "Prepr",
+              url: "https://my-ai-coach-buddy-92.lovable.app/",
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://my-ai-coach-buddy-92.lovable.app/#website",
+              name: "Prepr",
+              url: "https://my-ai-coach-buddy-92.lovable.app/",
+              publisher: { "@id": "https://my-ai-coach-buddy-92.lovable.app/#org" },
+            },
+          ],
+        }),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
+
 
 function RootShell({ children }: { children: ReactNode }) {
   return (

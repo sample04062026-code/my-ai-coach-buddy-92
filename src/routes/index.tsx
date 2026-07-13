@@ -12,10 +12,36 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Prepr — AI Interview Coach that adapts to you" },
       { name: "description", content: "Practice technical, behavioral, coding, and system design interviews with an AI coach that tailors questions to your resume and target role." },
+      { property: "og:title", content: "Prepr — AI Interview Coach that adapts to you" },
+      { property: "og:description", content: "Rehearse behavioral, technical, coding, and system design interviews with an AI coach that grounds every question in your resume and target JD." },
+      { property: "og:url", content: "https://my-ai-coach-buddy-92.lovable.app/" },
+      { property: "og:type", content: "website" },
       { property: "og:image", content: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200" },
+      { name: "twitter:title", content: "Prepr — AI Interview Coach that adapts to you" },
+      { name: "twitter:description", content: "Rehearse behavioral, technical, coding, and system design interviews with an AI coach that grounds every question in your resume and target JD." },
+      { name: "twitter:image", content: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://my-ai-coach-buddy-92.lovable.app/" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: "Prepr",
+          applicationCategory: "EducationalApplication",
+          operatingSystem: "Web",
+          description: "AI interview coach that tailors behavioral, technical, coding, and system design questions to your resume and target role, and grades every answer.",
+          url: "https://my-ai-coach-buddy-92.lovable.app/",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+        }),
+      },
     ],
   }),
 });
+
 
 const interviewTypes = [
   { icon: Users, name: "Behavioral", desc: "STAR-format questions scored on communication, leadership, and clarity." },
@@ -37,8 +63,10 @@ function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <SiteNav />
+      <main>
 
       {/* Hero */}
+
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-8 lg:py-32">
           <div className="flex flex-col justify-center">
@@ -172,7 +200,10 @@ function Landing() {
         </div>
       </section>
 
+      </main>
+
       <footer className="border-t border-border/40">
+
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-primary" />

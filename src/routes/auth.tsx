@@ -16,9 +16,17 @@ export const Route = createFileRoute("/auth")({
     meta: [
       { title: "Sign in · Prepr" },
       { name: "description", content: "Sign in or create your Prepr account to start practicing AI-powered interviews." },
+      { property: "og:title", content: "Sign in to Prepr" },
+      { property: "og:description", content: "Sign in or create a free Prepr account to start rehearsing interviews with an AI coach." },
+      { property: "og:url", content: "https://my-ai-coach-buddy-92.lovable.app/auth" },
+      { property: "og:type", content: "website" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://my-ai-coach-buddy-92.lovable.app/auth" },
     ],
   }),
 });
+
 
 function AuthPage() {
   const navigate = useNavigate();

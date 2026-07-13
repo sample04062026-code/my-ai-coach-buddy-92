@@ -1,0 +1,8 @@
+# Prepr
+
+> Prepr is an AI interview coach that adapts to your resume and target role — practice behavioral, technical, coding, system design, HR, and AI-engineer interviews with a coach that grades every answer.
+
+## Pages
+
+- [Home](/): Product overview, interview modes, features, and how it works.
+- [Sign in](/auth): Sign in or create a free Prepr account.
